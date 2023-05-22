@@ -609,18 +609,22 @@ function collect_hints(x::EXPR, env, missingrefs=:all, isquoted=false, errs=Tupl
     end
     if headof(x) === :errortoken
         # collect parse errors
+        @info "Pushing err 1: $x"
         push!(errs, (pos, x))
     elseif !isquoted
         if missingrefs != :none && isidentifier(x) && !hasref(x) &&
             !(valof(x) == "var" && parentof(x) isa EXPR && isnonstdid(parentof(x))) &&
             !((valof(x) == "stdcall" || valof(x) == "cdecl" || valof(x) == "fastcall" || valof(x) == "thiscall" || valof(x) == "llvmcall") && is_in_fexpr(x, x -> iscall(x) && isidentifier(x.args[1]) && valof(x.args[1]) == "ccall"))
 
+            @info "Pushing err 2: $x"
             push!(errs, (pos, x))
         elseif haserror(x) && errorof(x) isa StaticLint.LintCodes
             # collect lint hints
+            @info "Pushing err 3: $x"
             push!(errs, (pos, x))
         end
     elseif isquoted && missingrefs == :all && should_mark_missing_getfield_ref(x, env)
+        @info "Pushing err 4: $x"
         push!(errs, (pos, x))
     end
 
