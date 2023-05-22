@@ -617,6 +617,9 @@ function collect_hints(x::EXPR, env, missingrefs=:all, isquoted=false, errs=Tupl
             !((valof(x) == "stdcall" || valof(x) == "cdecl" || valof(x) == "fastcall" || valof(x) == "thiscall" || valof(x) == "llvmcall") && is_in_fexpr(x, x -> iscall(x) && isidentifier(x.args[1]) && valof(x.args[1]) == "ccall"))
 
             @info "Pushing err 2: $x"
+            @info "isidentifier: $(isidentifier(x))"
+            @info "!hasref: $(!hasref(x))"
+            @info "valof: $(valof(x))"
             push!(errs, (pos, x))
         elseif haserror(x) && errorof(x) isa StaticLint.LintCodes
             # collect lint hints
