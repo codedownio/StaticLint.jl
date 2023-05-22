@@ -612,6 +612,7 @@ function collect_hints(x::EXPR, env, missingrefs=:all, isquoted=false, errs=Tupl
         @info "Pushing err 1: $x"
         push!(errs, (pos, x))
     elseif !isquoted
+        @info "hasref($x): $(hasref(x))"
         if missingrefs != :none && isidentifier(x) && !hasref(x) &&
             !(valof(x) == "var" && parentof(x) isa EXPR && isnonstdid(parentof(x))) &&
             !((valof(x) == "stdcall" || valof(x) == "cdecl" || valof(x) == "fastcall" || valof(x) == "thiscall" || valof(x) == "llvmcall") && is_in_fexpr(x, x -> iscall(x) && isidentifier(x.args[1]) && valof(x.args[1]) == "ccall"))
